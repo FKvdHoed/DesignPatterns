@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
 public class Ship : MonoBehaviour {
-    private float mSpeed = 1;
-    private float mSpeedMax = 1;
-    private float mTurnAngleMax = 50;
+    private float mSpeedMax;
+    private float mTurnAngleMax;
+
     private Rigidbody mRigidbody;
 
+    private float mSpeed;
+    
     void Start() {
         mRigidbody = GetComponent<Rigidbody>();
     }
@@ -14,6 +18,12 @@ public class Ship : MonoBehaviour {
     void Update() {
         mRigidbody.velocity = transform.up * mRigidbody.velocity.magnitude;
         controls();
+    }
+
+    public void SetValues(Ship.SValues values) {
+        mSpeedMax = values.speedMax;
+        mSpeed = mSpeedMax; // Do in state
+        mTurnAngleMax = values.turningAngleMax;
     }
 
     public void RotateLeft() {
@@ -46,6 +56,12 @@ public class Ship : MonoBehaviour {
             RotateRight();
 
         if(Input.GetKey(KeyCode.W))
-            mRigidbody.velocity = transform.up * mSpeed;
+            mRigidbody.velocity = transform.up * mSpeed * Time.deltaTime;
+    }
+
+    [Serializable]
+    public struct SValues {
+        public float speedMax;
+        public float turningAngleMax;
     }
 }
