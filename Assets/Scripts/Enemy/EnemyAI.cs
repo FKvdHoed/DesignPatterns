@@ -1,28 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Ship))]
-public class EnemyAI : MonoBehaviour {
-    private PatrolState mPatrolState;
-
+public class EnemyAI : MonoBehaviour, IStateMachine {
     private IState mCurrentState;
-    public IState CurrentState {
-        get { return mCurrentState; }
-        set {
-            mCurrentState.Exit();
-            mCurrentState = value;
-            mCurrentState.Enter();
-        }
-    }
     
     void Start () {
-        mPatrolState = new PatrolState(GetComponent<Ship>());
-        mPatrolState.Enter();
-        mCurrentState = mPatrolState;
+        Ship ship = GetComponent<Ship>();
+        IState patrolState = new PatrolState(this, ship);
+        IState fleeState = new FleeState(this, patrolState, ship);
+
+        mCurrentState = fleeState;
 	}
 
     void Update() {
-        CurrentState.Update();
-    } 
+        mCurrentState.Update();
+    }
+
+    public void SetState(IState value) {
+        mCurrentState = value;
+    }
 }

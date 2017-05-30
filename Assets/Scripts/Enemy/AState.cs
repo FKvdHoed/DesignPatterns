@@ -2,27 +2,14 @@
 using UnityEngine;
 
 public abstract class AState : IState {
-    protected bool mActive;
     protected Ship mShip;
+    protected IStateMachine mStateMachine;
 
-    public AState(Ship ship) {
+    protected GameObject GameObject { get { return mShip.gameObject; } }
+
+    public AState(IStateMachine stateMachine, Ship ship) {
+        mStateMachine = stateMachine;
         mShip = ship;
-    }
-
-    public virtual bool Enter() {
-        if(!mActive) {
-            mActive = true;
-            return true;
-        } else
-            return false;
-    }
-
-    public virtual bool Exit() {
-        if(mActive) {
-            mActive = false;
-            return true;
-        } else
-            return false;
     }
 
     public abstract void Update();

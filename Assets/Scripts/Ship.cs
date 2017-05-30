@@ -4,8 +4,11 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
 public class Ship : MonoBehaviour {
+    private static int sMaxHealth = 100;
+
     private float mSpeedMax;
     private float mTurnAngleMax;
+    public int Health { get; private set; }
 
     private Rigidbody mRigidbody;
 
@@ -22,6 +25,7 @@ public class Ship : MonoBehaviour {
     public void SetValues(Ship.SValues values) {
         mSpeedMax = values.speedMax;
         mTurnAngleMax = values.turningAngleMax;
+        Health = sMaxHealth;
     }
 
     public void RotateLeft() {
@@ -40,9 +44,9 @@ public class Ship : MonoBehaviour {
 
     public void RotateTowards(Vector3 position) {
         float angle = Mathf.Clamp(Vector3.Angle(transform.up, position), 0, mTurnAngleMax);
-        float sign = Mathf.Sign(Vector3.Cross(position, transform.forward).z);
+        float sign = Mathf.Sign(Vector3.Cross(transform.up, position).z);
         Vector3 rotation = Vector3.forward * angle * sign * Time.deltaTime;
-        transform.rotation = Quaternion.Euler(rotation);
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + rotation);
     }
 
     public void Trust() {
