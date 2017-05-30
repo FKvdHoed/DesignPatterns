@@ -17,12 +17,10 @@ public class Ship : MonoBehaviour {
 
     void Update() {
         mRigidbody.velocity = transform.up * mRigidbody.velocity.magnitude;
-        controls();
     }
 
     public void SetValues(Ship.SValues values) {
         mSpeedMax = values.speedMax;
-        mSpeed = mSpeedMax; // Do in state
         mTurnAngleMax = values.turningAngleMax;
     }
 
@@ -41,22 +39,18 @@ public class Ship : MonoBehaviour {
     }
 
     public void RotateTowards(Vector3 position) {
-        float angle = Mathf.Clamp(Vector3.Angle(transform.forward, position), 0, mTurnAngleMax);
+        float angle = Mathf.Clamp(Vector3.Angle(transform.up, position), 0, mTurnAngleMax);
         float sign = Mathf.Sign(Vector3.Cross(position, transform.forward).z);
         Vector3 rotation = Vector3.forward * angle * sign * Time.deltaTime;
         transform.rotation = Quaternion.Euler(rotation);
     }
 
-    void controls() {
-        Vector3 rotation = transform.rotation.eulerAngles;
+    public void Trust() {
+        ++mSpeed;
+        Mathf.Clamp(mSpeed, 0, mSpeedMax);
+        mRigidbody.velocity = transform.up * mSpeed * Time.deltaTime;
+    }
 
-        if(Input.GetKey(KeyCode.A))
-            RotateLeft();
-        else if(Input.GetKey(KeyCode.D))
-            RotateRight();
-
-        if(Input.GetKey(KeyCode.W))
-            mRigidbody.velocity = transform.up * mSpeed * Time.deltaTime;
     }
 
     [Serializable]
