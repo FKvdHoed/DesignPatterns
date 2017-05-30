@@ -12,9 +12,9 @@ public class ObjectPoolItem
     public bool shouldExpand;
 }
 
-abstract class ObjectPool : MonoBehaviour
+public abstract class ObjectPool : MonoBehaviour
 {
-    private static ObjectPool SharedInstance;
+    private static ObjectPool myInstance;
 
     // List of all GameObjects inside the ObjectPool
     private List<GameObject> pooledObjects;
@@ -22,6 +22,11 @@ abstract class ObjectPool : MonoBehaviour
     [SerializeField]
     // Different types of GameObjects that can be initialized inside Editor (Bullet, Enemies etc.)
     private List<ObjectPoolItem> itemsToPool;
+
+    public static ObjectPool getInstance()
+    {
+        return myInstance;
+    }
 
     // Use this for initialization
     void Start()
@@ -65,18 +70,8 @@ abstract class ObjectPool : MonoBehaviour
 
     void Awake()
     {
-        SharedInstance = this;
+        myInstance = this;
     }
-
-    // Sample Implementation
-
-    /*
-     * GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject(“Player Bullet”); 
-    if (bullet != null) {
-    bullet.transform.position = turret.transform.position;
-    bullet.transform.rotation = turret.transform.rotation;
-    bullet.SetActive(true);
-    }*/
 
     // Update is called once per frame
     void Update()

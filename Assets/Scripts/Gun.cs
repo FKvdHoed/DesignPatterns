@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Gun : MonoBehaviour
+public class Turret : MonoBehaviour
 {
     // Specific Gun properties
     private GunProperties gunProperties;
@@ -10,11 +10,13 @@ public class Gun : MonoBehaviour
     // ReloadingStatus
     private Boolean reloading;
 
+    Transform turretTransform;
+
     // Amount of ammo left
     private int clipRemaining;
 
     // The type of Gun Behaviour
-    public IFireBehaviour behaviour;
+    public ITurretBehaviour behaviour;
 
     // The time at which reload was initiated
     private float timeAtReloadStarted;
@@ -26,7 +28,7 @@ public class Gun : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start(IFireBehaviour behaviour, GunProperties properties)
+    void Start(ITurretBehaviour behaviour, GunProperties properties)
     {
         this.behaviour = behaviour;
         gunProperties = properties;
@@ -43,20 +45,11 @@ public class Gun : MonoBehaviour
             return;
         }
         // Activate gun behaviour
-        behaviour.Activate();
+        behaviour.Activate(turretTransform);
         // Decrease ammo in Clip
         clipRemaining--;
     }
-
-    // Specific Gun properties
-    struct GunProperties
-    {
-        public int reloadTime;
-        //public int coolDown;
-        public int clipSize;
-        public int damage;
-    }
-
+    
     private void FinishReload()
     {
         reloading = false;
@@ -73,33 +66,73 @@ public class Gun : MonoBehaviour
                 FinishReload();
             }
         }
+    }
+}
+
+// Specific Gun properties
+struct GunProperties
+{
+    public int reloadTime;
+    //public int coolDown;
+    public int clipSize;
+    public int damage;
+}
+
+public abstract class TurretBehaviour : ITurretBehaviour
+{
+    private void SetPosition(GameObject gameObject, Transform transform)
+    {
+        gameObject.transform.position = transform.position;
+        gameObject.transform.rotation = transform.rotation;
+    }
+
+    public void OnHit(GameObject collidedObject, int damage)
+    {
+        //collidedObject.set
+    }
+
+    public abstract void Activate(Transform transform);
+
+    public void ActivateBehaviour(Transform transform, String tag)
+    {
+        GameObject gameObject = ObjectPool.getInstance().GetPooledObject(tag);
+
+        if (gameObject != null)
+        {
+            SetPosition(gameObject, transform);
+            gameObject.SetActive(true);
+        }
+    }
+}
+
+
+public class BulletBehaviour : TurretBehaviour
+{
+    public override void Activate(Transform transform)
+    {
+        ActivateBehaviour(transform, "Bullet");
     }    
 }
 
-public class Bullet : IFireBehaviour
+public class ShieldBehaviour : TurretBehaviour
 {
-    void IFireBehaviour.Activate()
+    public override void Activate(Transform transform)
     {
+        ActivateBehaviour(transform, "Shield");
     }
 }
 
-public class Shield : IFireBehaviour
+public class LaserBehaviour : TurretBehaviour
 {
-    void IFireBehaviour.Activate()
+    public override void Activate(Transform transform)
     {
-
-    }
-}
-
-public class Laser : IFireBehaviour
-{
-    void IFireBehaviour.Activate()
-    {
+        ActivateBehaviour(transform, "Laser");
     }
 }
 
 // The type of Gun Behaviour
-public interface IFireBehaviour
+public interface ITurretBehaviour
 {
-    void Activate();
+    void Activate(Transform tranform);
+    void OnHit(GameObject collidedObject, int damage);
 }
