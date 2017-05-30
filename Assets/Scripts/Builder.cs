@@ -3,6 +3,7 @@
 [DisallowMultipleComponent]
 public class Builder : MonoBehaviour {
     private static Builder sInstance;
+    public static Builder Instance { get { return sInstance; } }
 
     [Header("Player Ship")]
     [SerializeField]
@@ -15,24 +16,22 @@ public class Builder : MonoBehaviour {
     private Sprite mEnemySprite;
     [SerializeField]
     private Ship.SValues mEnemyValues;
-
-
+    
     void Awake() {
         if(sInstance == null)
             sInstance = this;
         else if(sInstance !=this)
             Destroy(gameObject);
     }
-
-    public static GameObject BuildShip() {
-    public static GameObject BuildPlayerShip() {
-        GameObject go = sInstance.buildShip(sInstance.mPlayerSprite, sInstance.mPlayerValues);
+    
+    public GameObject BuildPlayerShip() {
+        GameObject go = buildShip(mPlayerSprite, mPlayerValues);
         go.AddComponent<PlayerControls>();
         return go;
     }
 
-    public static GameObject BuildEnemyShip() {
-        GameObject go = sInstance.buildShip(sInstance.mEnemySprite, sInstance.mEnemyValues);
+    public GameObject BuildEnemyShip() {
+        GameObject go = buildShip(mEnemySprite, mEnemyValues);
         go.AddComponent<EnemyAI>();
         return go;
     }
