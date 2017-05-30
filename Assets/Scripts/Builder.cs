@@ -1,16 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [DisallowMultipleComponent]
 public class Builder : MonoBehaviour {
     private static Builder sInstance;
 
-    [Header("Player Ship Settings")]
+    [Header("Player Ship")]
     [SerializeField]
     private Sprite mPlayerSprite;
     [SerializeField]
     private Ship.SValues mPlayerValues;
+
+    [Header("Enemy Ship")]
+    [SerializeField]
+    private Sprite mEnemySprite;
+    [SerializeField]
+    private Ship.SValues mEnemyValues;
+
 
     void Awake() {
         if(sInstance == null)
@@ -20,12 +25,25 @@ public class Builder : MonoBehaviour {
     }
 
     public static GameObject BuildShip() {
+    public static GameObject BuildPlayerShip() {
+        GameObject go = sInstance.buildShip(sInstance.mPlayerSprite, sInstance.mPlayerValues);
+        go.AddComponent<PlayerControls>();
+        return go;
+    }
+
+    public static GameObject BuildEnemyShip() {
+        GameObject go = sInstance.buildShip(sInstance.mEnemySprite, sInstance.mEnemyValues);
+        go.AddComponent<EnemyAI>();
+        return go;
+    }
+
+    private GameObject buildShip(Sprite sprite, Ship.SValues values) {
         GameObject go = new GameObject();
 
         go.AddComponent<Rigidbody>().useGravity = false;
-        go.AddComponent<SpriteRenderer>().sprite = sInstance.mPlayerSprite;
-        go.AddComponent<Ship>().SetValues(sInstance.mPlayerValues);
-        
+        go.AddComponent<SpriteRenderer>().sprite = sprite;
+        go.AddComponent<Ship>().SetValues(values);
+
         return go;
     }
 }
