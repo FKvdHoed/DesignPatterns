@@ -16,7 +16,7 @@ public class Turret : MonoBehaviour
     private int clipRemaining;
 
     // The type of Gun Behaviour
-    public ITurretBehaviour behaviour;
+    public IWeaponBehaviour behaviour;
 
     // The time at which reload was initiated
     private float timeAtReloadStarted;
@@ -28,10 +28,15 @@ public class Turret : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start(ITurretBehaviour behaviour, GunProperties properties)
+    void Start(IWeaponBehaviour behaviour, GunProperties properties)
     {
         this.behaviour = behaviour;
         gunProperties = properties;
+    }
+
+    public void OnCollisionEnter2D(Collision2D col)
+    {
+        behaviour.OnHit(col, gunProperties.damage);
     }
 
     public void Shoot()
@@ -78,17 +83,17 @@ struct GunProperties
     public int damage;
 }
 
-public abstract class TurretBehaviour : ITurretBehaviour
+public abstract class WeaponBehaviour : IWeaponBehaviour
 {
     private void SetPosition(GameObject gameObject, Transform transform)
     {
         gameObject.transform.position = transform.position;
         gameObject.transform.rotation = transform.rotation;
-    }
+    }    
 
-    public void OnHit(GameObject collidedObject, int damage)
+    public void OnHit(Collision2D collidedObject, int damage)
     {
-        //collidedObject.set
+        collidedObject.gameObject.GetComponent<Health>().ShipHealth -= damage;
     }
 
     public abstract void Activate(Transform transform);
@@ -105,16 +110,15 @@ public abstract class TurretBehaviour : ITurretBehaviour
     }
 }
 
-
-public class BulletBehaviour : TurretBehaviour
+public class BulletBehaviour : WeaponBehaviour
 {
     public override void Activate(Transform transform)
     {
         ActivateBehaviour(transform, "Bullet");
-    }    
+    }
 }
 
-public class ShieldBehaviour : TurretBehaviour
+public class ShieldBehaviour : WeaponBehaviour
 {
     public override void Activate(Transform transform)
     {
@@ -122,7 +126,7 @@ public class ShieldBehaviour : TurretBehaviour
     }
 }
 
-public class LaserBehaviour : TurretBehaviour
+public class LaserBehaviour : WeaponBehaviour
 {
     public override void Activate(Transform transform)
     {
@@ -131,8 +135,8 @@ public class LaserBehaviour : TurretBehaviour
 }
 
 // The type of Gun Behaviour
-public interface ITurretBehaviour
+public interface IWeaponBehaviour
 {
     void Activate(Transform tranform);
-    void OnHit(GameObject collidedObject, int damage);
+    void OnHit(Collision2D collidedObject, int damage);
 }

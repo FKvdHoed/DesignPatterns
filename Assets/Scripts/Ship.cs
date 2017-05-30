@@ -20,7 +20,7 @@ public class Ship : MonoBehaviour {
 
     void Update() {
         mRigidbody.velocity = transform.up * mRigidbody.velocity.magnitude;
-    }
+    }    
 
     public void SetValues(Ship.SValues values) {
         mSpeedMax = values.speedMax;
