@@ -55,6 +55,7 @@ public class Ship : MonoBehaviour {
         mRigidbody.velocity = transform.up * mSpeed * Time.deltaTime;
     }
 
+    public void Shoot() {
     }
 
     [Serializable]

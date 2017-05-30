@@ -7,13 +7,18 @@ public class EnemyAI : MonoBehaviour, IStateMachine {
     
     void Start () {
         Ship ship = GetComponent<Ship>();
-        IState patrolState = new PatrolState(this, ship);
-        IState fleeState = new FleeState(this, patrolState, ship);
-
+        PatrolState patrolState = new PatrolState(this, ship);
+        FleeState fleeState = new FleeState(this, ship);
+        AttackState attackState = new AttackState(this, ship);
+        
         mCurrentState = fleeState;
+        patrolState.NextState = attackState;
+        fleeState.NextState = patrolState;
+        attackState.FleeState = fleeState;
+        attackState.PatrolState = patrolState;
 	}
 
-    void Update() {
+    public void Update() {
         mCurrentState.Update();
     }
 
