@@ -14,11 +14,14 @@ public class ObjectPoolItem
 
 abstract class ObjectPool : MonoBehaviour
 {
-    public static ObjectPool SharedInstance;
+    private static ObjectPool SharedInstance;
 
-    public List<GameObject> pooledObjects;
+    // List of all GameObjects inside the ObjectPool
+    private List<GameObject> pooledObjects;
 
-    public List<ObjectPoolItem> itemsToPool;
+    [SerializeField]
+    // Different types of GameObjects that can be initialized inside Editor (Bullet, Enemies etc.)
+    private List<ObjectPoolItem> itemsToPool;
 
     // Use this for initialization
     void Start()
