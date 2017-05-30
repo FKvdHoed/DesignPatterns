@@ -4,11 +4,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
 public class Ship : MonoBehaviour {
-    private static int sMaxHealth = 100;
-
     private float mSpeedMax;
-    private float mTurnAngleMax;
-    public int Health { get; private set; }
+    private float mTurnAngleMax;    
 
     private Rigidbody mRigidbody;
 
@@ -25,7 +22,6 @@ public class Ship : MonoBehaviour {
     public void SetValues(Ship.SValues values) {
         mSpeedMax = values.speedMax;
         mTurnAngleMax = values.turningAngleMax;
-        Health = sMaxHealth;
     }
 
     public void RotateLeft() {

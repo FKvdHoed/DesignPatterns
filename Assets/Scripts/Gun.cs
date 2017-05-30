@@ -89,12 +89,10 @@ public abstract class WeaponBehaviour : IWeaponBehaviour
     {
         gameObject.transform.position = transform.position;
         gameObject.transform.rotation = transform.rotation;
-    }    
-
-    public void OnHit(Collision2D collidedObject, int damage)
-    {
-        collidedObject.gameObject.GetComponent<Health>().ShipHealth -= damage;
     }
+
+    // On hit add damage
+    public abstract void OnHit(Collision2D collidedObject, int damage);
 
     public abstract void Activate(Transform transform);
 
@@ -116,6 +114,12 @@ public class BulletBehaviour : WeaponBehaviour
     {
         ActivateBehaviour(transform, "Bullet");
     }
+
+    // Bullet does damage to health
+    public override void OnHit(Collision2D collidedObject, int damage)
+    {
+            collidedObject.gameObject.GetComponent<Health>().ShipHealth -= damage;
+    }
 }
 
 public class ShieldBehaviour : WeaponBehaviour
@@ -124,6 +128,12 @@ public class ShieldBehaviour : WeaponBehaviour
     {
         ActivateBehaviour(transform, "Shield");
     }
+
+    // Shield does no damage
+    public override void OnHit(Collision2D collidedObject, int damage)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class LaserBehaviour : WeaponBehaviour
@@ -131,6 +141,12 @@ public class LaserBehaviour : WeaponBehaviour
     public override void Activate(Transform transform)
     {
         ActivateBehaviour(transform, "Laser");
+    }
+
+    // Laser does damage to Shield
+    public override void OnHit(Collision2D collidedObject, int damage)
+    {
+            collidedObject.gameObject.GetComponent<Shield>().ShieldResistance -= damage;
     }
 }
 
