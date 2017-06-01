@@ -7,9 +7,9 @@ public class EnemyAI : MonoBehaviour, IStateContext {
     
     void Start () {
         Ship ship = GetComponent<Ship>();
-        PatrolState patrolState = new PatrolState(this, ship);
-        FleeState fleeState = new FleeState(this, ship);
-        AttackState attackState = new AttackState(this, ship);
+        PatrolState patrolState = new PatrolState(ship);
+        FleeState fleeState = new FleeState(ship);
+        AttackState attackState = new AttackState(ship);
         
         patrolState.NextState = attackState;
         fleeState.NextState = patrolState;
@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour, IStateContext {
     }
 
     public void Request() {
-        mCurrentState.Handle();
+        mCurrentState.Handle(this);
     }
 
     public void SetState(IState value) {
