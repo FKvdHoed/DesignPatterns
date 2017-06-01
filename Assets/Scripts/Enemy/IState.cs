@@ -1,3 +1,3 @@
 ﻿public interface IState {
-    void Update();
+    void Handle(IStateContext context);
 }

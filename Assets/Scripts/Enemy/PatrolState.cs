@@ -7,18 +7,18 @@ public class PatrolState : AState {
 
     public IState NextState { get; set; }
 
-    public PatrolState (IStateMachine stateMachine, Ship ship) : base(stateMachine, ship) { }
+    public PatrolState (Ship ship) : base(ship) { }
     
-    public override void Update() {
-        if(switchState())
+    public override void Handle(IStateContext context) {
+        if(switchState(context))
             return;
 
         float r = Random.Range(-90, 90);
         mShip.RotateTowards(rotateVector(Vector2.up, r));
-        mShip.Trust();
+        mShip.Move();
     }
 
-    private bool switchState() {
+    private bool switchState(IStateContext context) {
         PlayerControls player = GameObject.FindObjectOfType<PlayerControls>();
         if(player == null)
             return false;
@@ -26,7 +26,7 @@ public class PatrolState : AState {
         Vector3 direction = player.transform.position - GameObject.transform.position;
         float angle = Vector3.Angle(direction, GameObject.transform.up);
         if(viewDistance <= direction.magnitude && angle <= viewRadius) {
-            mStateMachine.SetState(NextState);
+            context.SetState(NextState);
             return true;
         }
 

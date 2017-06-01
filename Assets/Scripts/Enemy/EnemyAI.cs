@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Ship))]
-public class EnemyAI : MonoBehaviour, IStateMachine {
+public class EnemyAI : MonoBehaviour, IStateContext {
     private IState mCurrentState;
     
     void Start () {
@@ -11,15 +11,20 @@ public class EnemyAI : MonoBehaviour, IStateMachine {
         FleeState fleeState = new FleeState(this, ship);
         AttackState attackState = new AttackState(this, ship);
         
-        mCurrentState = fleeState;
         patrolState.NextState = attackState;
         fleeState.NextState = patrolState;
         attackState.FleeState = fleeState;
         attackState.PatrolState = patrolState;
+
+        mCurrentState = fleeState;
 	}
 
-    public void Update() {
-        mCurrentState.Update();
+    void Update() {
+        Request();
+    }
+
+    public void Request() {
+        mCurrentState.Handle();
     }
 
     public void SetState(IState value) {

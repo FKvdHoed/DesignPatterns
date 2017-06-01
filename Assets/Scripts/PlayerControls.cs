@@ -18,6 +18,6 @@ public class PlayerControls : MonoBehaviour {
             mShip.RotateRight();
 
         if(Input.GetKey(KeyCode.W))
-            mShip.Trust();
+            mShip.Move();
     }
 }

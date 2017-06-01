@@ -7,20 +7,20 @@ public class FleeState : AState {
 
     public IState NextState { get; set; }
 
-    public FleeState(IStateMachine stateMachine, Ship ship) : base(stateMachine, ship) { }
+    public FleeState(Ship ship) : base(ship) { }
 
-    public override void Update() {
+    public override void Handle(IStateContext context) {
         PlayerControls player = GameObject.FindObjectOfType<PlayerControls>();
         if(player == null)
             return;
 
         Vector3 playerPos = player.transform.position;
         Vector3 direction = GameObject.transform.position - playerPos;
-        if(sSaveDistance < direction.magnitude && sHPTreshholdPatrol <= mShip.Health)
-            mStateMachine.SetState(NextState);
+        if(sSaveDistance < direction.magnitude /*&& sHPTreshholdPatrol <= mShip.Health*/)
+            context.SetState(NextState);
         else {
             mShip.RotateTowards(direction);
-            mShip.Trust();
+            mShip.Move();
         }
     }
 }

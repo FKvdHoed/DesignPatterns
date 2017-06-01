@@ -7,10 +7,10 @@ public class AttackState : AState {
     public IState PatrolState { get; set; }
     public IState FleeState { get; set; }
 
-    public AttackState(IStateMachine stateMachine, Ship ship) : base(stateMachine, ship) { }
+    public AttackState(Ship ship) : base(ship) { }
 
-    public override void Update() {
-        if(switchState())
+    public override void Handle(IStateContext context) {
+        if(switchState(context))
             return;
 
         PlayerControls player = GameObject.FindObjectOfType<PlayerControls>();
@@ -19,14 +19,14 @@ public class AttackState : AState {
         
         Vector3 direction = GameObject.transform.position - player.transform.position;
         mShip.RotateTowards(direction);
-        mShip.Trust();
+        mShip.Move();
 
-        mShip.Shoot();
+        //mShip.Shoot();
     }
 
-    private bool switchState() {
-        if(mShip.Health <= sHPMin) {
-            mStateMachine.SetState(FleeState);
+    private bool switchState(IStateContext context) {
+        if(false/*mShip.Health <= sHPMin*/) {
+            context.SetState(FleeState);
             return true;
         }
         else {
@@ -35,7 +35,7 @@ public class AttackState : AState {
                 return false;
 
             if(sDistanceMax <= (GameObject.transform.position - player.transform.position).magnitude) {
-                mStateMachine.SetState(PatrolState);
+                context.SetState(PatrolState);
                 return true;
             }
         }

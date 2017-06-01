@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AState">
+    <Position X="10.25" Y="2.75" Width="1.5" />
+    <Members>
+      <Method Name="AState" Hidden="true" />
+      <Property Name="GameObject" Hidden="true" />
+      <Field Name="mShip" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\AState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mStateMachine" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PatrolState">
+    <Position X="7.5" Y="5.25" Width="1.5" />
+    <Members>
+      <Method Name="PatrolState" Hidden="true" />
+      <Method Name="rotateVector" Hidden="true" />
+      <Method Name="switchState" Hidden="true" />
+      <Field Name="viewDistance" Hidden="true" />
+      <Field Name="viewRadius" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAQAAAAAAIAgEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\PatrolState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="NextState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FleeState">
+    <Position X="12.75" Y="5.25" Width="1.5" />
+    <Members>
+      <Method Name="FleeState" Hidden="true" />
+      <Field Name="sHPTreshholdPatrol" Hidden="true" />
+      <Field Name="sSaveDistance" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgAIAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\FleeState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="NextState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EnemyAI">
+    <Position X="15" Y="2.75" Width="1.5" />
+    <Members>
+      <Method Name="Start" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQABAAAACAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\EnemyAI.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mCurrentState" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ObjectPool">
+    <Position X="4" Y="2" Width="1.5" />
+    <Members>
+      <Method Name="Awake" Hidden="true" />
+      <Field Name="itemsToPool" Hidden="true" />
+      <Method Name="Start" Hidden="true" />
+      <Method Name="Update" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAQAACgAAAAAAQAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\ObjectPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AttackState">
+    <Position X="10.25" Y="5.25" Width="1.5" />
+    <Members>
+      <Method Name="AttackState" Hidden="true" />
+      <Field Name="sDistanceMax" Hidden="true" />
+      <Field Name="sHPMin" Hidden="true" />
+      <Method Name="switchState" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgAAACAAAIAAAAAAAAAAAABIAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\AttackState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PatrolState" />
+      <Property Name="FleeState" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="IStateMachine">
+    <Position X="15" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\IStateMachine.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IState">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enemy\IState.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
