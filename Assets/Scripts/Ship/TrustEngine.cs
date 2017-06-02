@@ -7,12 +7,10 @@ using UnityEngine;
 public class TrustEngine : AEngine {
     private Rigidbody mRigidbody;
     private Ship mShip;
-    private AEngine mEngine;
 
     void Start() {
         mRigidbody = GetComponent<Rigidbody>();
         mShip = GetComponent<Ship>();
-        mEngine = GetComponent<AEngine>();
     }
 
     void Update() {
@@ -20,6 +18,6 @@ public class TrustEngine : AEngine {
     }
     
     public override void Move() {
-        mRigidbody.velocity = transform.up * mEngine.Power / mShip.Mass * Time.deltaTime;
+        mRigidbody.velocity = transform.up * Power / mShip.Mass * Time.deltaTime;
     }
 }
