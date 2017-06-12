@@ -4,12 +4,7 @@ public class AttackState : AState {
     private static int sHPMin = 10;
     private static float sDistanceMax = 100;
 
-    public IState PatrolState { get; set; }
-    public IState FleeState { get; set; }
-
     public AttackState(Ship ship) : base(ship) {
-        PatrolState = new FleeState(ship);
-        FleeState = new FleeState(ship);
     }
 
     public override void Handle(IStateContext context) {
@@ -29,7 +24,7 @@ public class AttackState : AState {
 
     private bool switchState(IStateContext context) {
         if(false/*mShip.Health <= sHPMin*/) {
-            context.SetState(FleeState);
+            context.SetState(new FleeState(mShip));
             return true;
         }
         else {
@@ -38,7 +33,7 @@ public class AttackState : AState {
                 return false;
 
             if(sDistanceMax <= (GameObject.transform.position - player.transform.position).magnitude) {
-                context.SetState(PatrolState);
+                context.SetState(new FleeState(mShip));
                 return true;
             }
         }

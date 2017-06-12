@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// https://www.raywenderlich.com/136091/object-pooling-unity
+// Source: https://www.raywenderlich.com/136091/object-pooling-unity
 
+// The ObjectPoolItem is a model for an Object that be can initialized using the ObjectPool. 
+// Using amountToPool you can define the amount of Instances that needs to be created at startup.
 [System.Serializable]
-public class ObjectPoolItem
-{
+public class ObjectPoolItem { 
     public int amountToPool;
     public GameObject objectToPool;
-    public bool shouldExpand;
-}
+    public bool shouldExpand; }
 
-abstract class ObjectPool : MonoBehaviour
-{
-    private static ObjectPool SharedInstance;
-
+// The ObjectPool is a Singleton and therefore inherits our GenericSingletonClass.
+public class ObjectPool : GenericSingletonClass<ObjectPool> { 
     // List of all GameObjects inside the ObjectPool
     private List<GameObject> pooledObjects;
 
@@ -23,23 +21,25 @@ abstract class ObjectPool : MonoBehaviour
     // Different types of GameObjects that can be initialized inside Editor (Bullet, Enemies etc.)
     private List<ObjectPoolItem> itemsToPool;
 
+    /* 
+     * Sample Implementation
+     * ObjectPool.Instance.GetPooledObject(GameObject.tag);
+    }*/
+
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         pooledObjects = new List<GameObject>();
         foreach (ObjectPoolItem item in itemsToPool)
         {
             for (int i = 0; i < item.amountToPool; i++)
             {
+                // The Unity Game object will be set inactive until it is actually used.
                 GameObject obj = (GameObject)Instantiate(item.objectToPool);
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
-            }
-        }
-    }
-
-    public GameObject GetPooledObject(string tag)
-    {
+            }        }    }
+    // Get a single pooled object, if the pool is contains no more non-active object and the pool is expandable it creates new instance.
+    public GameObject GetPooledObject(string tag) {
         for (int i = 0; i < pooledObjects.Count; i++)
         {
             if (!pooledObjects[i].activeInHierarchy && pooledObjects[i].tag == tag)
@@ -57,30 +57,5 @@ abstract class ObjectPool : MonoBehaviour
                     obj.SetActive(false);
                     pooledObjects.Add(obj);
                     return obj;
-                }
-            }
-        }
-        return null;
-    }
-
-    void Awake()
-    {
-        SharedInstance = this;
-    }
-
-    // Sample Implementation
-
-    /*
-     * GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject(“Player Bullet”); 
-    if (bullet != null) {
-    bullet.transform.position = turret.transform.position;
-    bullet.transform.rotation = turret.transform.rotation;
-    bullet.SetActive(true);
-    }*/
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-}
+                }            }
+        }        return null;    }}
