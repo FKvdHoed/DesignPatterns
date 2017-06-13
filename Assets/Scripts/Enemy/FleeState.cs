@@ -7,7 +7,9 @@ public class FleeState : AState {
 
     public IState NextState { get; set; }
 
-    public FleeState(Ship ship) : base(ship) { }
+    public FleeState(Ship ship) : base(ship) {
+        NextState = new PatrolState(ship);
+    }
 
     public override void Handle(IStateContext context) {
         PlayerControls player = GameObject.FindObjectOfType<PlayerControls>();

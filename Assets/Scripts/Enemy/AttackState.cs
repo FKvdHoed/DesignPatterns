@@ -7,7 +7,10 @@ public class AttackState : AState {
     public IState PatrolState { get; set; }
     public IState FleeState { get; set; }
 
-    public AttackState(Ship ship) : base(ship) { }
+    public AttackState(Ship ship) : base(ship) {
+        PatrolState = new FleeState(ship);
+        FleeState = new FleeState(ship);
+    }
 
     public override void Handle(IStateContext context) {
         if(switchState(context))
