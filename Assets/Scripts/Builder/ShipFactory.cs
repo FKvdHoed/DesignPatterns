@@ -9,9 +9,9 @@ public class ShipFactory {
         return sInstance;
     }
 
-    private GameObject mEnemyCruiserMinor;
     private GameObject mEnemyCruiserMayor;
     private GameObject mEnemyCruiserTactic;
+    private GameObject mEnemyCruiserMinor;
     
     private ShipFactory() {
         ShipDirector director = new ShipDirector();
@@ -33,8 +33,8 @@ public class ShipFactory {
         IBuildControllerBehavior aiBehavior = new BuildAIBehavior();
         IBuildControllerBehavior playerBehavior = new BuildPlayerBehavior();
 
-        ShipBuilder builder = new ShipBuilder();
-
+        ConcreteBuilder builder = new ConcreteBuilder();
+        
         builder.ShipBehavior = cruiserBehavior;
         builder.WeaponbayBehavior = bulletBehavior;
         builder.EngineBehavior = trustBehavior;
@@ -42,7 +42,7 @@ public class ShipFactory {
         builder.ControllerBehavior = aiBehavior;
         director.Construct(builder);
         mEnemyCruiserMinor = builder.GetResult();
-
+        
         builder.SpecialBehavior = shieldBehavior;
         director.Construct(builder);
         mEnemyCruiserMayor = builder.GetResult();
@@ -56,7 +56,6 @@ public class ShipFactory {
     public GameObject createEnemyCruiserMinor() {
         return GameObject.Instantiate(mEnemyCruiserMinor);
     }
-
     public GameObject createEnemyCruiserMayor() {
         return GameObject.Instantiate(mEnemyCruiserMayor);
     }
@@ -64,9 +63,8 @@ public class ShipFactory {
     public GameObject createEnemyCruiserTactic() {
         return GameObject.Instantiate(mEnemyCruiserTactic);
     }
-
     private class ShipDirector {
-        public void Construct(ShipBuilder builder) {
+        public void Construct(AShipBuilder builder) {
             builder.BuildBase();
             builder.BuildShip();
             builder.BuildWeaponbay();
