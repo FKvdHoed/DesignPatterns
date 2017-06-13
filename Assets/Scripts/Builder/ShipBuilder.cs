@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class ShipBuilder {
+class ConcreteBuilder : AShipBuilder {
     private GameObject mProduct;
 
     public IBuildShipBehavior ShipBehavior { get; set; }
@@ -8,27 +8,26 @@ class ShipBuilder {
     public IBuildEngineBehavior EngineBehavior { get; set; }
     public IBuildSpecialBehavior SpecialBehavior { get; set; }
     public IBuildControllerBehavior ControllerBehavior { get; set; }
-
-    public void BuildBase() {
+    
+    public override void BuildBase() {
         mProduct = new GameObject();
         mProduct.AddComponent<Rigidbody>().useGravity = false;
     }
-    public void BuildShip() {
+    public override void BuildShip() {
         ShipBehavior.Build(mProduct.AddComponent<Ship>());
     }
-    public void BuildWeaponbay() {
+    public override void BuildWeaponbay() {
         WeaponbayBehavior.Build(mProduct.GetComponent<Ship>().Weaponbay);
     }
-    public void BuildEngine() {
+    public override void BuildEngine() {
         EngineBehavior.Build(mProduct);
     }
-    public void BuildSpecial() {
+    public override void BuildSpecial() {
         SpecialBehavior.Build(mProduct);
     }
-    public void BuildController() {
+    public override void BuildController() {
         ControllerBehavior.Build(mProduct);
     }
-
     public GameObject GetResult() {
         return mProduct;
     }
